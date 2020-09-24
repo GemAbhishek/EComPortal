@@ -13,7 +13,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
+            <th hidden>
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
@@ -25,13 +25,13 @@
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
-            <th>
+            <th hidden>
                 @Html.DisplayNameFor(model => model.Image_name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Rating)
             </th>
-            <th>
+            <th hidden>
                 @Html.DisplayNameFor(model => model.IsAvailable)
             </th>
             <th></th>
@@ -40,7 +40,7 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            <td hidden>
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
@@ -52,18 +52,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
-            <td>
+            <td hidden>
                 @Html.DisplayFor(modelItem => item.Image_name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Rating)
             </td>
-            <td>
+            <td hidden>
                 @Html.DisplayFor(modelItem => item.IsAvailable)
             </td>
             <td>
                 <a class="btn btn-outline-info" asp-area="" asp-controller="Product" asp-action="Edit" asp-route-id="@item.Id">Rate</a>
-                <a class="btn btn-outline-success" asp-area="" asp-controller="ProceedToBuy" asp-action="Index">Proceed To Buy</a>
+                <a class="btn btn-outline-success" asp-area="" asp-controller="ProceedToBuy" asp-action="Details" asp-route-id="@item.Id.ToString()">Proceed To Buy</a>
                 @*@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
             </td>
         </tr>

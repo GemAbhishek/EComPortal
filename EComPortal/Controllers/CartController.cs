@@ -6,18 +6,19 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using EComPortal.Models;
+using EComPortal.Models.Cart;
 using EComPortal.Models.Product;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace EComPortal.Controllers
 {
-    public class ProductController : Controller
+    public class CartController : Controller
     {
         Uri baseAddress = new Uri("https://localhost:44388");
         HttpClient client;
 
-        public ProductController()
+        public CartController()
         {
             client = new HttpClient();
             client.BaseAddress = baseAddress;
@@ -25,102 +26,91 @@ namespace EComPortal.Controllers
 
         public IActionResult Index()
         {
-            List<ProductItem> ls = new List<ProductItem>();
+            string Var = TokenInfo.UserName;
+            List<CartItem> ls = new List<CartItem>();
 
             string token = TokenInfo.StringToken;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            HttpResponseMessage response;
+
+            HttpResponseMessage response = null;
             try
             {
-                response = client.GetAsync(client.BaseAddress + "api/product").Result;
+                response = client.GetAsync(client.BaseAddress + "api/Cart/" + Var).Result;
             }
             catch
             {
                 return RedirectToAction("Error");
             }
-
             if (response.IsSuccessStatusCode)
             {
+
                 string data = response.Content.ReadAsStringAsync().Result;
-                ls = JsonConvert.DeserializeObject<List<ProductItem>>(data);
+                ls = JsonConvert.DeserializeObject<List<CartItem>>(data);
                 return View(ls);
             }
-            return RedirectToAction("Error");
+            return View(ls);
         }
-        public ActionResult Search()
-        {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult Search(Search obj)
-        {
-            return RedirectToAction("Details", new { id = obj.str });
-        }
-        public ActionResult Details(string id)
+
+        public IActionResult Post(string id)
         {
             ProductItem product = new ProductItem();
 
             string token = TokenInfo.StringToken;
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            HttpResponseMessage response;
+            HttpResponseMessage responseProduct;
             try
             {
-                response = client.GetAsync(client.BaseAddress + "api/product/" + id).Result;
+                responseProduct = client.GetAsync(client.BaseAddress + "api/product/"+id).Result;
             }
             catch
             {
                 return RedirectToAction("Error");
             }
 
-            if (response.IsSuccessStatusCode)
+            if (responseProduct.IsSuccessStatusCode)
             {
-                string data = response.Content.ReadAsStringAsync().Result;
-                product = JsonConvert.DeserializeObject<ProductItem>(data);
-                return View(product);
+                string dataProduct = responseProduct.Content.ReadAsStringAsync().Result;
+
+                product = JsonConvert.DeserializeObject<ProductItem>(dataProduct);
             }
-            return RedirectToAction("Error");
 
-        }
-
-
-
-        public ActionResult Edit(int id)
-        {
-            ProductItem product = new ProductItem();
-
-            string token = TokenInfo.StringToken;
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            HttpResponseMessage response;
-            try
-            {
-                response = client.GetAsync(client.BaseAddress + "api/product/" + id).Result;
-            }
-            catch
+            if (product.IsAvailable == false)
             {
                 return RedirectToAction("Error");
             }
 
-            if (response.IsSuccessStatusCode)
-            {
-                string data = response.Content.ReadAsStringAsync().Result;
-                product = JsonConvert.DeserializeObject<ProductItem>(data);
-                return View(product);
-            }
-            return RedirectToAction("Error");
-        }
-        [HttpPost]
-        public ActionResult Edit(ProductItem product)
-        {
-            string token = TokenInfo.StringToken;
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string Var = TokenInfo.UserName;
 
             string data = JsonConvert.SerializeObject(product);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response;
+            HttpResponseMessage response = null;
             try
             {
-                response = client.PutAsync(client.BaseAddress + "api/product/"+ product.Id, content).Result;
+                response = client.PostAsync(client.BaseAddress + "api/Cart/" + Var, content).Result;
+            }
+            catch
+            {
+                return RedirectToAction("Error");
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Error");
+            
+        }
+
+        public IActionResult Delete(int id)
+        {
+            string token = TokenInfo.StringToken;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            HttpResponseMessage response = null;
+            try
+            {
+                response = client.DeleteAsync(client.BaseAddress + "api/Cart/" + id).Result;
             }
             catch
             {
@@ -130,9 +120,11 @@ namespace EComPortal.Controllers
                 return RedirectToAction("Index");
             return RedirectToAction("Error");
         }
+
         public ActionResult Error()
         {
             return View();
         }
+
     }
 }

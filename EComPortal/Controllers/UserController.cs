@@ -35,6 +35,8 @@ namespace EComPortal.Controllers
             }
             catch
             {
+                //Session["log"] = Login;
+
                 return RedirectToAction("Error");
             }
             string token = response.Content.ReadAsStringAsync().Result;
@@ -43,9 +45,13 @@ namespace EComPortal.Controllers
             {
                 TokenInfo.StringToken = token;
                 TokenInfo.UserName = user.Username;
+                //Session["log"] = Logout;
                 return RedirectToAction("Index","Home");
 
             }
+
+            //Session["log"] = Login;
+
             TokenInfo.StringToken = "";
             TokenInfo.UserName = "";
             return RedirectToAction("Error");
