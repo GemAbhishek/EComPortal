@@ -507,3 +507,4 @@ G:\visual studio\CTS MFPE Project V1\Retail Product Management\ECommercePortal\E
 G:\visual studio\CTS MFPE Project V1\Retail Product Management\ECommercePortal\EComPortal\obj\Debug\netcoreapp3.1\Razor\Views\ProceedToBuy\Details.cshtml.g.cs
 G:\visual studio\CTS MFPE Project V1\Retail Product Management\ECommercePortal\EComPortal\obj\Debug\netcoreapp3.1\Razor\Views\Cart\Index.cshtml.g.cs
 G:\visual studio\CTS MFPE Project V1\Retail Product Management\ECommercePortal\EComPortal\obj\Debug\netcoreapp3.1\Razor\Views\Cart\Error.cshtml.g.cs
+G:\visual studio\CTS MFPE Project V1\Retail Product Management\ECommercePortal\EComPortal\obj\Debug\netcoreapp3.1\Razor\Views\User\SeeProduct.cshtml.g.cs

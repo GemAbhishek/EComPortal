@@ -46,7 +46,7 @@ namespace EComPortal.Controllers
                 TokenInfo.StringToken = token;
                 TokenInfo.UserName = user.Username;
                 //Session["log"] = Logout;
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("SeeProduct");
 
             }
 
@@ -61,6 +61,11 @@ namespace EComPortal.Controllers
             TokenInfo.StringToken = "";
             TokenInfo.UserName = "";
             return RedirectToAction("Login");
+        }
+
+        public IActionResult SeeProduct()
+        {
+            return View();
         }
         public ActionResult Error()
         {
